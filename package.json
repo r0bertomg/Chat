@@ -1,0 +1,16 @@
+{
+  "name": "chat-realtime",
+  "version": "1.0.0",
+  "description": "Chat em tempo real com Express e Socket.IO pronto para localhost e Render",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "express": "^5.3.0",
+    "socket.io": "^4.8.4"
+  }
+}

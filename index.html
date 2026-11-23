@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Chat - Tempo Real</title>
+</head>
+<body>
+  <header class="topo-chat">
+    <div class="avatar">C</div>
+    <div class="info-topo">
+      <h1>Chat Geral</h1>
+      <span id="status-conexao" class="status offline">Conectando...</span>
+    </div>
+  </header>
+
+  <ul id="mensagens"></ul>
+
+  <form id="form-chat">
+    <input type="text" id="nome" placeholder="Seu nome" maxlength="25" autocomplete="off" required>
+    <input type="text" id="mensagem" placeholder="Digite sua mensagem" autocomplete="off" required>
+    <button type="submit">Enviar</button>
+  </form>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // Conecta automaticamente no localhost ou na URL do Render
+    const socket = io({
+      transports: ['websocket', 'polling']
+    });
+
+    const nomeInput = document.getElementById('nome');
+    const mensagemInput = document.getElementById('mensagem');
+    const mensagens = document.getElementById('mensagens');
+    const statusConexao = document.getElementById('status-conexao');
+    const form = document.getElementById('form-chat');
+
+    let meuNome = '';
+
+    socket.on('connect', () => {
+      statusConexao.textContent = 'Online';
+      statusConexao.className = 'status online';
+    });
+
+    socket.on('disconnect', () => {
+      statusConexao.textContent = 'Reconectando...';
+      statusConexao.className = 'status offline';
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const nome = nomeInput.value.trim();
+      const mensagem = mensagemInput.value.trim();
+
+      if (!nome || !mensagem) return;
+
+      meuNome = nome;
+      const hora = new Date().toLocaleTimeString('pt-BR', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      socket.emit('chat message', { nome, mensagem, hora });
+
+      mensagemInput.value = '';
+      nomeInput.disabled = true;
+      mensagemInput.focus();
+    });
+
+    socket.on('chat message', (dados) => {
+      const item = document.createElement('li');
+      const ehMinha = meuNome !== '' && dados.nome === meuNome;
+
+      item.classList.add(ehMinha ? 'enviada' : 'recebida');
+
+      const autorEl = document.createElement('span');
+      autorEl.className = 'autor';
+      autorEl.textContent = ehMinha ? 'Você' : dados.nome;
+
+      const textoEl = document.createElement('p');
+      textoEl.className = 'texto';
+      textoEl.textContent = dados.mensagem;
+
+      const horaEl = document.createElement('span');
+      horaEl.className = 'hora';
+      horaEl.textContent = dados.hora || '';
+
+      item.appendChild(autorEl);
+      item.appendChild(textoEl);
+      if (dados.hora) item.appendChild(horaEl);
+
+      mensagens.appendChild(item);
+      mensagens.scrollTop = mensagens.scrollHeight;
+    });
+  </script>
+</body>
+</html>

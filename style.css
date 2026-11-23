@@ -1,0 +1,277 @@
+:root {
+  color-scheme: light;
+  --topo: #008069;
+  --fundo: #efeae2;
+  --barra: #f0f2f5;
+  --recebida: #ffffff;
+  --enviada: #d9fdd3;
+  --texto: #111b21;
+  --texto-suave: #667781;
+  --verde: #00a884;
+  --verde-escuro: #008f72;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+  color: var(--texto);
+  background-color: #d1d7db;
+  display: flex;
+  flex-direction: column;
+  max-width: 900px;
+  margin: 0 auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.topo-chat {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 64px;
+  padding: 0 20px;
+  background-color: var(--topo);
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #dfe5e7;
+  color: var(--topo);
+  font-weight: 700;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-topo h1 {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.status {
+  font-size: 12px;
+  display: inline-block;
+  margin-top: 2px;
+}
+
+.status.online {
+  color: #b9f6ca;
+}
+
+.status.offline {
+  color: #ffCDD2;
+}
+
+#mensagens {
+  flex: 1;
+  list-style: none;
+  padding: 20px 6%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: var(--fundo);
+  background-image: radial-gradient(rgba(11, 20, 26, 0.06) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+#mensagens li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 7px 12px 6px;
+  border-radius: 8px;
+  max-width: 68%;
+  font-size: 14.5px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13);
+  animation: entrar 0.15s ease-out;
+}
+
+#mensagens li.recebida {
+  align-self: flex-start;
+  background-color: var(--recebida);
+  border-top-left-radius: 0;
+}
+
+#mensagens li.recebida::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -8px;
+  width: 8px;
+  height: 13px;
+  background-color: var(--recebida);
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+}
+
+#mensagens li.enviada {
+  align-self: flex-end;
+  background-color: var(--enviada);
+  border-top-right-radius: 0;
+}
+
+#mensagens li.enviada::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -8px;
+  width: 8px;
+  height: 13px;
+  background-color: var(--enviada);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.autor {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--topo);
+  margin-bottom: 2px;
+}
+
+li.enviada .autor {
+  color: #067d62;
+}
+
+.texto {
+  color: var(--texto);
+}
+
+.hora {
+  align-self: flex-end;
+  font-size: 11px;
+  color: var(--texto-suave);
+  margin-top: 3px;
+}
+
+form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background-color: var(--barra);
+  flex-shrink: 0;
+}
+
+input {
+  font: inherit;
+  font-size: 15px;
+  color: var(--texto);
+  background-color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 14px;
+  outline: none;
+}
+
+input::placeholder {
+  color: var(--texto-suave);
+}
+
+input:focus-visible {
+  box-shadow: 0 0 0 2px var(--verde);
+}
+
+#nome {
+  width: 160px;
+}
+
+#nome:disabled {
+  background-color: #e4e7ea;
+  color: var(--texto-suave);
+  cursor: not-allowed;
+}
+
+#mensagem {
+  flex: 1;
+  min-width: 0;
+}
+
+button {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: var(--verde);
+  border: none;
+  border-radius: 999px;
+  padding: 11px 22px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+button:hover {
+  background-color: var(--verde-escuro);
+}
+
+button:focus-visible {
+  outline: 3px solid var(--topo);
+  outline-offset: 2px;
+}
+
+#mensagens::-webkit-scrollbar {
+  width: 6px;
+}
+
+#mensagens::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#mensagens::-webkit-scrollbar-thumb {
+  background: rgba(11, 20, 26, 0.25);
+  border-radius: 3px;
+}
+
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    box-shadow: none;
+  }
+
+  #mensagens {
+    padding: 14px 12px;
+  }
+
+  #mensagens li {
+    max-width: 85%;
+  }
+
+  form {
+    flex-wrap: wrap;
+    padding: 8px 10px;
+  }
+
+  #nome {
+    width: 100%;
+  }
+
+  #mensagem {
+    width: calc(100% - 100px);
+  }
+}
